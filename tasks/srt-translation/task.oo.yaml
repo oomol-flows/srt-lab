@@ -1,0 +1,156 @@
+ui:
+  default_width: 450
+inputs_def:
+  - handle: srt_file
+    json_schema:
+      type: string
+      ui:widget: file
+      ui:options:
+        filters:
+          - name: SRT
+            extensions:
+              - srt
+        excludeAll: true
+    description: "SRT file to translate"
+  - handle: source_language
+    json_schema:
+      type: string
+      enum:
+        - auto
+        - en
+        - zh
+        - es
+        - fr
+        - de
+        - ja
+        - ko
+        - ru
+        - ar
+        - pt
+        - it
+        - nl
+        - pl
+        - tr
+        - vi
+        - th
+        - id
+        - hi
+      ui:options:
+        enumNames:
+          - Auto Detect
+          - English
+          - Chinese
+          - Spanish
+          - French
+          - German
+          - Japanese
+          - Korean
+          - Russian
+          - Arabic
+          - Portuguese
+          - Italian
+          - Dutch
+          - Polish
+          - Turkish
+          - Vietnamese
+          - Thai
+          - Indonesian
+          - Hindi
+    value: auto
+    description: "Source language of the SRT file"
+  - handle: target_language
+    json_schema:
+      type: string
+      enum:
+        - en
+        - zh
+        - es
+        - fr
+        - de
+        - ja
+        - ko
+        - ru
+        - ar
+        - pt
+        - it
+        - nl
+        - pl
+        - tr
+        - vi
+        - th
+        - id
+        - hi
+      ui:options:
+        enumNames:
+          - English
+          - Chinese
+          - Spanish
+          - French
+          - German
+          - Japanese
+          - Korean
+          - Russian
+          - Arabic
+          - Portuguese
+          - Italian
+          - Dutch
+          - Polish
+          - Turkish
+          - Vietnamese
+          - Thai
+          - Indonesian
+          - Hindi
+    value: en
+    description: "Target language for translation"
+  - handle: translation_style
+    json_schema:
+      type: string
+      enum:
+        - formal
+        - casual
+        - professional
+        - slang
+        - literary
+      ui:options:
+        enumNames:
+          - Formal
+          - Casual
+          - Professional
+          - Slang
+          - Literary
+    value: null
+    nullable: true
+    description: "Translation style prompt (e.g., formal, casual, professional,
+      slang, literary). Default is null for neutral style."
+  - handle: llm
+    json_schema:
+      ui:options:
+        title: Model
+      ui:widget: llm::model
+    value:
+      model: oomol-chat
+      temperature: 0
+      top_p: 0.5
+      max_tokens: 4096
+    description: "LLM model configuration for translation"
+outputs_def:
+  - handle: srt_file
+    json_schema:
+      type: string
+      ui:widget: file
+      ui:options:
+        excludeAll: true
+        filters:
+          - name: SRT
+            extensions:
+              - srt
+executor:
+  name: python
+  options:
+    entry: __init__.py
+    spawn: false
+title: SRT Translation
+icon: ":carbon:translate:"
+description: "Translate SRT subtitle files between different languages using
+  LLM. Supports auto-detection of source language and multiple target
+  languages."

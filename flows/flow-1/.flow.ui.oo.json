@@ -1,0 +1,21 @@
+{
+  "nodes": {
+    "audio-to-srt#1": {
+      "rfNode": {
+        "position": {
+          "x": 0,
+          "y": 38
+        }
+      }
+    },
+    "srt-translation#1": {
+      "contentWidth": 450,
+      "rfNode": {
+        "position": {
+          "x": 486,
+          "y": 0
+        }
+      }
+    }
+  }
+}

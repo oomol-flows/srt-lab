@@ -1,0 +1,18 @@
+version: 0.0.1
+scripts:
+  bootstrap: >
+    apt-get update && apt-get install -y ffmpeg python3-dev build-essential
+    libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libavfilter-dev
+    libswscale-dev libswresample-dev pkg-config
+
+    npm install
+
+    pip install av faster-whisper
+dependencies:
+  llm: 0.3.5
+icon: ./icon.png
+name: srt-lab
+repository: https://github.com/oomol-flows/srt-lab.git
+releaseNotes: init
+displayName: "%srt-lab%"
+description: "%a-complete-solution-for-converting-audio-files-to-subtitles-and%"

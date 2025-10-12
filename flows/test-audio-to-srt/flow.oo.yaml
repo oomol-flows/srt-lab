@@ -1,0 +1,10 @@
+nodes:
+  - node_id: audio-to-srt#1
+    task: self::audio-to-srt
+    inputs_from:
+      - handle: audio_file
+        value: /oomol-driver/oomol-storage/Area22211_audio_trimmed.mp3
+      - handle: model_size
+        value: base
+      - handle: language
+        value: auto

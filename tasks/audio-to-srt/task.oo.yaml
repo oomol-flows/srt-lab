@@ -1,0 +1,104 @@
+ui:
+  default_width: 450
+inputs_def:
+  - handle: audio_file
+    json_schema:
+      type: string
+      ui:widget: file
+      ui:options:
+        filters:
+          - name: Audio Files
+            extensions:
+              - mp3
+              - wav
+              - m4a
+              - flac
+              - ogg
+              - aac
+        excludeAll: true
+    description: "Audio file to transcribe"
+  - handle: model_size
+    json_schema:
+      type: string
+      enum:
+        - tiny
+        - base
+        - small
+        - medium
+        - large-v3
+      ui:options:
+        enumNames:
+          - Tiny (fastest, lowest accuracy)
+          - Base
+          - Small
+          - Medium
+          - Large-v3 (slowest, highest accuracy)
+    value: base
+    description: "Faster-whisper model size (larger models are more accurate but slower)"
+  - handle: language
+    json_schema:
+      type: string
+      enum:
+        - auto
+        - en
+        - zh
+        - es
+        - fr
+        - de
+        - ja
+        - ko
+        - ru
+        - ar
+        - pt
+        - it
+        - nl
+        - pl
+        - tr
+        - vi
+        - th
+        - id
+        - hi
+      ui:options:
+        enumNames:
+          - Auto Detect
+          - English
+          - Chinese
+          - Spanish
+          - French
+          - German
+          - Japanese
+          - Korean
+          - Russian
+          - Arabic
+          - Portuguese
+          - Italian
+          - Dutch
+          - Polish
+          - Turkish
+          - Vietnamese
+          - Thai
+          - Indonesian
+          - Hindi
+    value: auto
+    description: "Language of the audio for better recognition accuracy"
+outputs_def:
+  - handle: srt_file
+    json_schema:
+      type: string
+      ui:widget: file
+      ui:options:
+        excludeAll: true
+        filters:
+          - name: SRT
+            extensions:
+              - srt
+    description: "Generated SRT subtitle file"
+executor:
+  name: python
+  options:
+    entry: __init__.py
+    spawn: false
+title: Audio to SRT
+icon: ":carbon:audio-console:"
+description: "Convert audio files to SRT subtitle format using faster-whisper
+  local model. Supports multiple audio formats and languages."

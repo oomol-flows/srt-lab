@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(poetry add:*)",
+      "Bash(mkdir:*)",
+      "Bash(poetry install:*)",
+      "Bash(poetry lock:*)",
+      "Bash(apt-get:*)",
+      "Bash(apt-get install:*)",
+      "Bash(pip install:*)",
+      "Read(//oomol-driver/oomol-storage/**)",
+      "Bash(pip uninstall:*)",
+      "Bash(PIP_NO_BINARY=av poetry install --no-root)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

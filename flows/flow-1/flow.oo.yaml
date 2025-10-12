@@ -1,0 +1,29 @@
+nodes:
+  - node_id: audio-to-srt#1
+    task: self::audio-to-srt
+    inputs_from:
+      - handle: model_size
+        value: base
+      - handle: language
+        value: auto
+      - handle: audio_file
+        value: /oomol-driver/oomol-storage/Area22211_audio.mp3
+  - node_id: srt-translation#1
+    task: self::srt-translation
+    inputs_from:
+      - handle: srt_file
+        from_node:
+          - node_id: audio-to-srt#1
+            output_handle: srt_file
+      - handle: source_language
+        value: auto
+      - handle: target_language
+        value: en
+      - handle: llm
+        value:
+          model: oomol-chat
+          temperature: 0
+          top_p: 0.5
+          max_tokens: 4096
+      - handle: translation_style
+        value:
