@@ -7,7 +7,7 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
-dependencies = ["openai (>=2.3.0,<3.0.0)"]
+dependencies = []
 
 [tool.poetry]
 package-mode = false
