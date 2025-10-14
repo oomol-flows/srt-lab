@@ -2,6 +2,7 @@ ui:
   default_width: 450
 inputs_def:
   - handle: audio_file
+    description: "%audio-file-to-transcribe%"
     json_schema:
       type: string
       ui:widget: file
@@ -16,8 +17,8 @@ inputs_def:
               - ogg
               - aac
         excludeAll: true
-    description: "Audio file to transcribe"
   - handle: model_size
+    description: "%faster-whisper-model-size-larger-models-are-more-accurate-but-sl%"
     json_schema:
       type: string
       enum:
@@ -34,8 +35,8 @@ inputs_def:
           - Medium
           - Large-v3 (slowest, highest accuracy)
     value: base
-    description: "Faster-whisper model size (larger models are more accurate but slower)"
   - handle: language
+    description: "%language-of-the-audio-for-better-recognition-accuracy%"
     json_schema:
       type: string
       enum:
@@ -80,7 +81,6 @@ inputs_def:
           - Indonesian
           - Hindi
     value: auto
-    description: "Language of the audio for better recognition accuracy"
 outputs_def:
   - handle: srt_file
     json_schema:
@@ -98,7 +98,6 @@ executor:
   options:
     entry: __init__.py
     spawn: false
-title: Audio to SRT
+title: "%audio-to-srt%"
 icon: ":carbon:audio-console:"
-description: "Convert audio files to SRT subtitle format using faster-whisper
-  local model. Supports multiple audio formats and languages."
+description: "%convert-audio-files-to-srt-subtitle-format-using-faster-whisper%"

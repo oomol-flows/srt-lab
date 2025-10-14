@@ -1,4 +1,16 @@
 {
   "srt-lab": "SRT Lab",
-  "a-complete-solution-for-converting-audio-files-to-subtitles-and": "A complete solution for converting audio files to subtitles and translating them into multiple languages - no coding required!"
+  "a-complete-solution-for-converting-audio-files-to-subtitles-and": "A complete solution for converting audio files to subtitles and translating them into multiple languages - no coding required!",
+  "audio-to-srt": "Audio to SRT",
+  "convert-audio-files-to-srt-subtitle-format-using-faster-whisper": "Convert audio files to SRT subtitle format using faster-whisper local model. Supports multiple audio formats and languages.",
+  "audio-file-to-transcribe": "Audio file to transcribe",
+  "faster-whisper-model-size-larger-models-are-more-accurate-but-sl": "Faster-whisper model size (larger models are more accurate but slower)",
+  "language-of-the-audio-for-better-recognition-accuracy": "Language of the audio for better recognition accuracy",
+  "srt-translation": "SRT Translation",
+  "translate-srt-subtitle-files-between-different-languages-using-l": "Translate SRT subtitle files between different languages using LLM. Supports auto-detection of source language and multiple target languages.",
+  "srt-file-to-translate": "SRT file to translate",
+  "source-language-of-the-srt-file": "Source language of the SRT file",
+  "target-language-for-translation": "Target language for translation",
+  "translation-style-prompt-e-g-formal-casual-professional-slang-li": "Translation style prompt (e.g., formal, casual, professional, slang, literary). Default is null for neutral style.",
+  "llm-model-configuration-for-translation": "LLM model configuration for translation"
 }

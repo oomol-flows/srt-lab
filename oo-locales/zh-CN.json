@@ -1,4 +1,16 @@
 {
   "srt-lab": "SRT实验室",
-  "a-complete-solution-for-converting-audio-files-to-subtitles-and": "一个完整的解决方案，可将音频文件转换为字幕并翻译成多种语言——无需编程！"
+  "a-complete-solution-for-converting-audio-files-to-subtitles-and": "一个完整的解决方案，可将音频文件转换为字幕并翻译成多种语言——无需编程！",
+  "audio-to-srt": "音频转 SRT",
+  "convert-audio-files-to-srt-subtitle-format-using-faster-whisper": "使用 faster-whisper 本地模型将音频文件转换为 SRT 字幕格式。支持多种音频格式和语言。",
+  "audio-file-to-transcribe": "音频文件转录",
+  "faster-whisper-model-size-larger-models-are-more-accurate-but-sl": "Faster-whisper 模型大小（模型越大，准确率越高，但速度越慢）",
+  "language-of-the-audio-for-better-recognition-accuracy": "音频的语言以提高识别准确率",
+  "srt-translation": "SRT 翻译",
+  "translate-srt-subtitle-files-between-different-languages-using-l": "使用大语言模型翻译 SRT 字幕文件为不同语言。支持自动检测源语言和多目标语言翻译。",
+  "srt-file-to-translate": "SRT 文件待翻译",
+  "source-language-of-the-srt-file": "SRT 文件的源语言",
+  "target-language-for-translation": "翻译目标语言",
+  "translation-style-prompt-e-g-formal-casual-professional-slang-li": "翻译风格提示（例如：正式、休闲、专业、俚语、文学）。默认值为null，表示中性风格。",
+  "llm-model-configuration-for-translation": "用于翻译的LLM模型配置"
 }

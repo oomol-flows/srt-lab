@@ -2,6 +2,7 @@ ui:
   default_width: 450
 inputs_def:
   - handle: srt_file
+    description: "%srt-file-to-translate%"
     json_schema:
       type: string
       ui:widget: file
@@ -11,8 +12,8 @@ inputs_def:
             extensions:
               - srt
         excludeAll: true
-    description: "SRT file to translate"
   - handle: source_language
+    description: "%source-language-of-the-srt-file%"
     json_schema:
       type: string
       enum:
@@ -57,8 +58,8 @@ inputs_def:
           - Indonesian
           - Hindi
     value: auto
-    description: "Source language of the SRT file"
   - handle: target_language
+    description: "%target-language-for-translation%"
     json_schema:
       type: string
       enum:
@@ -101,8 +102,8 @@ inputs_def:
           - Indonesian
           - Hindi
     value: en
-    description: "Target language for translation"
   - handle: translation_style
+    description: "%translation-style-prompt-e-g-formal-casual-professional-slang-li%"
     json_schema:
       type: string
       enum:
@@ -118,11 +119,10 @@ inputs_def:
           - Professional
           - Slang
           - Literary
-    value: null
+    value:
     nullable: true
-    description: "Translation style prompt (e.g., formal, casual, professional,
-      slang, literary). Default is null for neutral style."
   - handle: llm
+    description: "%llm-model-configuration-for-translation%"
     json_schema:
       ui:options:
         title: Model
@@ -132,7 +132,6 @@ inputs_def:
       temperature: 0
       top_p: 0.5
       max_tokens: 4096
-    description: "LLM model configuration for translation"
 outputs_def:
   - handle: srt_file
     json_schema:
@@ -149,8 +148,6 @@ executor:
   options:
     entry: __init__.py
     spawn: false
-title: SRT Translation
+title: "%srt-translation%"
 icon: ":carbon:translate:"
-description: "Translate SRT subtitle files between different languages using
-  LLM. Supports auto-detection of source language and multiple target
-  languages."
+description: "%translate-srt-subtitle-files-between-different-languages-using-l%"
