@@ -1,13 +1,14 @@
 # Audio & Subtitle Translation Toolkit
 
-A complete solution for converting audio files to subtitles and translating them into multiple languages - no coding required!
+A complete solution for converting audio files to subtitles, translating them into multiple languages, and extracting audio segments - no coding required!
 
 ## What Does This Project Do?
 
-This toolkit helps you work with audio and subtitle files in two main ways:
+This toolkit helps you work with audio and subtitle files in three main ways:
 
 1. **Convert Audio to Subtitles** - Automatically transcribe speech from audio files into subtitle files (SRT format)
 2. **Translate Subtitles** - Convert subtitles from one language to another while preserving timing and formatting
+3. **Extract Audio Segments** - Intelligently extract audio clips based on subtitle timestamps
 
 Perfect for content creators, educators, translators, and anyone working with multilingual video content.
 
@@ -80,6 +81,40 @@ Perfect for content creators, educators, translators, and anyone working with mu
 
 ---
 
+### 3. Extract Audio Segment
+
+**What it does:** Extracts a targeted audio segment (~25 seconds) from audio files based on Whisper SRT subtitle timestamps.
+
+**Use cases:**
+- Creating audio samples for voice cloning or TTS training
+- Extracting representative clips from long recordings
+- Generating preview snippets from podcasts or audiobooks
+- Selecting speech segments with specific characteristics
+
+**Features:**
+- **Smart segment selection methods**:
+  - First valid: Quick extraction from the beginning
+  - Longest: Finds the longest continuous speech block
+  - Densest: Selects the segment with most words (best for sample quality)
+  - Random: Randomly picks a valid segment
+- **Flexible duration**: Target any duration from 10-60 seconds (default: 25s)
+- **Intelligent boundary detection**: Automatically groups continuous speech and avoids silent gaps
+- **Subtitle-based extraction**: Uses accurate Whisper timestamps for precise cuts
+- **Multiple audio formats**: Supports MP3, WAV, M4A, FLAC, OGG, AAC
+
+**How to use:**
+1. Select your SRT subtitle file (from Whisper/Audio to SRT)
+2. Select the corresponding audio file
+3. Choose target duration (default: 25 seconds)
+4. Pick selection method (densest recommended for quality)
+5. Run the block to extract the audio segment
+
+**Output:**
+- Extracted audio file with clear naming (e.g., `audio_extracted_45s-70s.mp3`)
+- Start time, end time, and actual duration information
+
+---
+
 ## Common Workflows
 
 ### Workflow 1: Audio to Multilingual Subtitles
@@ -107,6 +142,22 @@ Transcribe podcasts and make them available in multiple languages:
 ```
 Podcast MP3 → Audio to SRT → Original Language Subtitles
                            → SRT Translation → Translated Subtitles
+```
+
+### Workflow 4: Voice Sample Extraction for TTS/Cloning
+
+Extract high-quality voice samples from audio content:
+
+```
+Audio File → Audio to SRT → Extract Audio Segment (Densest) → 25s Voice Sample
+```
+
+### Workflow 5: Content Preview Generation
+
+Create preview clips from long audio content:
+
+```
+Long Recording → Audio to SRT → Extract Audio Segment (First/Random) → Preview Clip
 ```
 
 ---
@@ -158,6 +209,16 @@ When you first use the **Audio to SRT** block:
 - **Adjust AI temperature settings** (in advanced options):
   - Lower temperature (0-0.3): More consistent, literal translations
   - Higher temperature (0.5-0.8): More creative, natural-sounding translations
+
+### Extract Audio Segment Tips
+
+- **Use "Densest" method** for voice cloning samples to get speech-rich segments
+- **Adjust target duration** based on your needs:
+  - Voice samples: 20-30 seconds
+  - Preview clips: 15-25 seconds
+  - Training data: 25-40 seconds
+- **Ensure SRT quality**: Better subtitle timing = more accurate extraction
+- **Check audio length**: Audio file must be longer than target duration
 
 ---
 
@@ -216,15 +277,17 @@ All subtitle files are generated in **SRT (SubRip)** format, which is widely com
 
 ```
 srt-translation/
-├── flows/                  # Workflow definitions
-│   ├── flow-1/            # Example workflow
-│   └── test-audio-to-srt/ # Audio transcription test workflow
-├── tasks/                  # Reusable blocks
-│   ├── audio-to-srt/      # Audio to subtitle conversion
-│   └── srt-translation/   # Subtitle translation
-├── package.oo.yaml         # OOMOL configuration
-├── pyproject.toml          # Python dependencies
-└── README.md               # This file
+├── flows/                      # Workflow definitions
+│   ├── flow-1/                # Example workflow
+│   ├── test-audio-to-srt/     # Audio transcription test workflow
+│   └── test-extract-segment/  # Audio extraction test workflow
+├── tasks/                      # Reusable blocks
+│   ├── audio-to-srt/          # Audio to subtitle conversion
+│   ├── srt-translation/       # Subtitle translation
+│   └── extract-audio-segment/ # Audio segment extraction
+├── package.oo.yaml             # OOMOL configuration
+├── pyproject.toml              # Python dependencies
+└── README.md                   # This file
 ```
 
 ---
@@ -248,6 +311,12 @@ A: Yes, you can translate in any direction between supported languages.
 
 **Q: What if my language isn't supported?**
 A: The current version supports 18 major languages. Additional languages may be added in future updates.
+
+**Q: Why is the extracted audio segment shorter than expected?**
+A: If the source audio is shorter than the target duration, the block extracts the longest available segment. Also, the algorithm looks for continuous speech blocks and may adjust boundaries to avoid cutting mid-word.
+
+**Q: Which selection method should I use for voice cloning?**
+A: Use "Densest" for voice cloning/TTS training, as it selects segments with the most words, providing richer speech data.
 
 ---
 
