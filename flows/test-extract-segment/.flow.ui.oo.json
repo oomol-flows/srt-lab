@@ -4,25 +4,15 @@
       "rfNode": {
         "position": {
           "x": 0,
-          "y": 38
-        }
-      }
-    },
-    "srt-translation#1": {
-      "contentWidth": 450,
-      "rfNode": {
-        "position": {
-          "x": 486,
           "y": 0
         }
       }
     },
     "extract-audio-segment#1": {
-      "contentWidth": 450,
       "rfNode": {
         "position": {
-          "x": 103,
-          "y": 410
+          "x": 600,
+          "y": 0
         }
       }
     }

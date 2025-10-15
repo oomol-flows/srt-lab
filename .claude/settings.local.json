@@ -10,7 +10,9 @@
       "Bash(pip install:*)",
       "Read(//oomol-driver/oomol-storage/**)",
       "Bash(pip uninstall:*)",
-      "Bash(PIP_NO_BINARY=av poetry install --no-root)"
+      "Bash(PIP_NO_BINARY=av poetry install --no-root)",
+      "Bash(poetry show:*)",
+      "Bash(ffprobe:*)"
     ],
     "deny": [],
     "ask": []

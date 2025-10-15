@@ -12,5 +12,13 @@
   "source-language-of-the-srt-file": "Source language of the SRT file",
   "target-language-for-translation": "Target language for translation",
   "translation-style-prompt-e-g-formal-casual-professional-slang-li": "Translation style prompt (e.g., formal, casual, professional, slang, literary). Default is null for neutral style.",
-  "llm-model-configuration-for-translation": "LLM model configuration for translation"
+  "llm-model-configuration-for-translation": "LLM model configuration for translation",
+  "extract-audio-segment-1": "Extract Audio Segment #1",
+  "test-extract-audio-segment": "Test Extract Audio Segment",
+  "extract-audio-segment": "Extract Audio Segment",
+  "extract-a-25-second-audio-segment-based-on-whisper-srt-timestamp": "Extract a ~25-second audio segment based on Whisper SRT timestamps",
+  "srt-subtitle-file-with-timestamp-information-from-whisper": "SRT subtitle file with timestamp information (from Whisper)",
+  "original-audio-file-to-extract-segment-from": "Original audio file to extract segment from",
+  "target-duration-in-seconds-for-the-extracted-segment": "Target duration in seconds for the extracted segment",
+  "method-to-select-the-audio-segment": "Method to select the audio segment"
 }

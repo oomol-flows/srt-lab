@@ -27,3 +27,13 @@ nodes:
           max_tokens: 4096
       - handle: translation_style
         value:
+  - node_id: extract-audio-segment#1
+    title: "%extract-audio-segment-1%"
+    inputs_from:
+      - handle: srt_file
+      - handle: audio_file
+      - handle: target_duration
+        value: 25
+      - handle: selection_method
+        value: densest
+    task: self::extract-vocal-audio-segment

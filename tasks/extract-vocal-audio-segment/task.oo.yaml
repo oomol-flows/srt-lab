@@ -1,0 +1,86 @@
+ui:
+  default_width: 450
+inputs_def:
+  - handle: srt_file
+    description: "%srt-subtitle-file-with-timestamp-information-from-whisper%"
+    json_schema:
+      type: string
+      ui:widget: file
+      ui:options:
+        filters:
+          - name: SRT Files
+            extensions:
+              - srt
+        excludeAll: true
+  - handle: audio_file
+    description: "%original-audio-file-to-extract-segment-from%"
+    json_schema:
+      type: string
+      ui:widget: file
+      ui:options:
+        filters:
+          - name: Audio Files
+            extensions:
+              - mp3
+              - wav
+              - m4a
+              - flac
+              - ogg
+              - aac
+        excludeAll: true
+  - handle: target_duration
+    description: "%target-duration-in-seconds-for-the-extracted-segment%"
+    json_schema:
+      type: number
+      minimum: 10
+      maximum: 60
+    value: 25
+  - handle: selection_method
+    description: "%method-to-select-the-audio-segment%"
+    json_schema:
+      type: string
+      enum:
+        - first
+        - longest
+        - densest
+        - random
+      ui:options:
+        enumNames:
+          - First valid segment
+          - Longest continuous speech
+          - Most words (densest)
+          - Random segment
+    value: densest
+outputs_def:
+  - handle: extracted_audio
+    json_schema:
+      type: string
+      ui:widget: file
+      ui:options:
+        excludeAll: true
+        filters:
+          - name: Audio Files
+            extensions:
+              - mp3
+              - wav
+    description: "Extracted audio segment file"
+  - handle: start_time
+    description: "Start timestamp in seconds"
+    json_schema:
+      type: number
+  - handle: end_time
+    description: "End timestamp in seconds"
+    json_schema:
+      type: number
+  - handle: duration
+    description: "Actual duration in seconds"
+    json_schema:
+      type: number
+executor:
+  name: python
+  options:
+    entry: __init__.py
+    spawn: false
+title: "%extract-audio-segment%"
+icon: ":carbon:cut:"
+description: "%extract-a-25-second-audio-segment-based-on-whisper-srt-timestamp%"

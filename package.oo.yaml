@@ -1,4 +1,4 @@
-version: 0.0.8
+version: 0.0.9
 scripts:
   bootstrap: >
     apt-get update && apt-get install -y ffmpeg python3-dev build-essential

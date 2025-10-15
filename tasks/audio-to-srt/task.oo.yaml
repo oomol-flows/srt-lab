@@ -34,7 +34,7 @@ inputs_def:
           - Small
           - Medium
           - Large-v3 (slowest, highest accuracy)
-    value: base
+    value: medium
   - handle: language
     description: "%language-of-the-audio-for-better-recognition-accuracy%"
     json_schema:
