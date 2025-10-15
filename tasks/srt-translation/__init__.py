@@ -101,8 +101,15 @@ def main(params: Inputs, context: Context) -> Outputs | None:
         return len(text) // 4
 
     # Calculate dynamic batch size to stay well under token limit
-    # Reserve tokens for: prompt template (~200), response (~2x input), safety margin
-    max_input_tokens = 50000  # Conservative limit for input text
+    # Model limit: 262,144 tokens total (input + output)
+    # Reserve tokens for: prompt template (~500), response (≈ input size), safety margin (50%)
+    # Formula: max_input_tokens + prompt_overhead + max_output_tokens < 262,144 * 0.5
+    max_model_tokens = llm_config.get("max_tokens", 128000)
+    # Ensure we don't exceed half the model's context window for safety
+    safe_total_limit = min(262144 // 2, max_model_tokens)
+    # Account for prompt overhead (~500 tokens) and equal space for input/output
+    prompt_overhead = 500
+    max_input_tokens = (safe_total_limit - prompt_overhead) // 2  # Split remaining between input and output
 
     # Translate subtitles in dynamic batches
     translated_subtitles = []
@@ -153,12 +160,14 @@ Only provide the translated texts, one per line with the same numbering.
 {source_text}"""
 
         # Call LLM for translation using OpenAI SDK
+        # Use calculated safe output limit instead of config max_tokens
+        safe_output_tokens = max_input_tokens  # Match input size for output
         response = client.chat.completions.create(
             model=llm_config["model"],
             messages=[{"role": "user", "content": prompt}],
             temperature=llm_config.get("temperature", 0),
             top_p=llm_config.get("top_p", 0.5),
-            max_tokens=llm_config.get("max_tokens", 4096)
+            max_tokens=safe_output_tokens
         )
 
         translated_text = response.choices[0].message.content
