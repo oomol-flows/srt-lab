@@ -96,12 +96,44 @@ def main(params: Inputs, context: Context) -> Outputs | None:
     if translation_style and translation_style in style_descriptions:
         style_instruction = f" Use {style_descriptions[translation_style]}."
 
-    # Translate subtitles in batches
-    translated_subtitles = []
-    batch_size = 10  # Process 10 subtitles at a time
+    # Estimate tokens (rough approximation: 1 token ≈ 4 characters)
+    def estimate_tokens(text):
+        return len(text) // 4
 
-    for i in range(0, len(subtitles), batch_size):
-        batch = subtitles[i:i+batch_size]
+    # Calculate dynamic batch size to stay well under token limit
+    # Reserve tokens for: prompt template (~200), response (~2x input), safety margin
+    max_input_tokens = 50000  # Conservative limit for input text
+
+    # Translate subtitles in dynamic batches
+    translated_subtitles = []
+
+    i = 0
+    while i < len(subtitles):
+        batch = []
+        current_tokens = 0
+
+        # Build batch dynamically based on token count
+        while i < len(subtitles):
+            sub_text = subtitles[i][2].strip()
+            sub_tokens = estimate_tokens(sub_text)
+
+            # Check if adding this subtitle would exceed limit
+            if current_tokens + sub_tokens > max_input_tokens and batch:
+                break
+
+            batch.append(subtitles[i])
+            current_tokens += sub_tokens
+            i += 1
+
+            # Safety limit: don't batch more than 50 subtitles at once
+            if len(batch) >= 50:
+                break
+
+        if not batch:
+            # Single subtitle is too large, process it anyway and let it fail gracefully
+            batch = [subtitles[i]]
+            i += 1
+
         texts_to_translate = [sub[2].strip() for sub in batch]
 
         # Create prompt for batch translation

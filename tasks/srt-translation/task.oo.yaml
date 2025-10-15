@@ -128,10 +128,10 @@ inputs_def:
         title: Model
       ui:widget: llm::model
     value:
-      model: oomol-chat
-      temperature: 0
-      top_p: 0.5
-      max_tokens: 4096
+      model: deepseek-chat
+      temperature: 0.5
+      top_p: 1
+      max_tokens: 128000
 outputs_def:
   - handle: srt_file
     json_schema:
