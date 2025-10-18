@@ -9,7 +9,7 @@ nodes:
       - handle: language
         value: auto
         from_flow:
-          - input_handle: language
+          []
       - handle: audio_file
         from_node:
           - node_id: extract-audio#1
@@ -33,7 +33,7 @@ nodes:
       - handle: subtitle_language
         value: null
         from_flow:
-          - input_handle: target_language
+          []
       - handle: subtitle_title
         value: null
     task: ffmpeg::make-mkv-video
@@ -60,7 +60,7 @@ nodes:
       - handle: source_language
         value: auto
         from_flow:
-          - input_handle: language
+          []
       - handle: target_language
         value: zh
         from_flow:
@@ -111,61 +111,14 @@ inputs_def:
           - Small
           - Medium
           - Large-v3 (slowest, highest accuracy)
-    nullable: false
     value: medium
+    nullable: false
     executor_name: python
   - handle: use_gpu
     json_schema:
       type: boolean
-    nullable: false
     value: true
-    executor_name: python
-  - handle: language
-    json_schema:
-      type: string
-      enum:
-        - auto
-        - en
-        - zh
-        - es
-        - fr
-        - de
-        - ja
-        - ko
-        - ru
-        - ar
-        - pt
-        - it
-        - nl
-        - pl
-        - tr
-        - vi
-        - th
-        - id
-        - hi
-      ui:options:
-        enumNames:
-          - Auto Detect
-          - English
-          - Chinese (Simplified)
-          - Spanish
-          - French
-          - German
-          - Japanese
-          - Korean
-          - Russian
-          - Arabic
-          - Portuguese
-          - Italian
-          - Dutch
-          - Polish
-          - Turkish
-          - Vietnamese
-          - Thai
-          - Indonesian
-          - Hindi
     nullable: false
-    value: auto
     executor_name: python
   - handle: target_language
     json_schema:
@@ -209,20 +162,20 @@ inputs_def:
           - Thai
           - Indonesian
           - Hindi
-    nullable: false
     value: zh
+    nullable: false
     executor_name: python
   - handle: llm
     json_schema:
       ui:options:
         title: Model
       ui:widget: llm::model
-    nullable: false
     value:
       model: kimi-k2-turbo-preview
       temperature: 0.5
       top_p: 1
       max_tokens: 262144
+    nullable: false
     executor_name: python
 outputs_def:
   - handle: output_video
