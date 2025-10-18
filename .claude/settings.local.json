@@ -18,7 +18,9 @@
       "Bash(python:*)",
       "Read(//root/.oocana/sessions/cf30e2fe-3cf8-430a-9a3c-5fb3b8f70f23/**)",
       "Read(//root/.oocana/sessions/**)",
-      "Read(//root/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/**)"
+      "Read(//root/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/**)",
+      "mcp__oomol__runFlow",
+      "mcp__oomol__getTaskResult"
     ],
     "deny": [],
     "ask": []

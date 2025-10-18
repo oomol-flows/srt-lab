@@ -1,4 +1,4 @@
-version: 0.1.0
+version: 0.1.1
 scripts:
   bootstrap: >
     apt-get update && apt-get install -y ffmpeg python3-dev build-essential
@@ -11,7 +11,7 @@ scripts:
 
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 dependencies:
-  {}
+  ffmpeg: 0.3.7
 icon: ./icon.png
 name: srt-lab
 repository: https://github.com/oomol-flows/srt-lab.git

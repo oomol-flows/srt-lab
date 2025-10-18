@@ -19,5 +19,16 @@
   "srt-subtitle-file-with-timestamp-information-from-whisper": "SRT subtitle file with timestamp information (from Whisper)",
   "original-audio-file-to-extract-segment-from": "Original audio file to extract segment from",
   "target-duration-in-seconds-for-the-extracted-segment": "Target duration in seconds for the extracted segment",
-  "method-to-select-the-audio-segment": "Method to select the audio segment"
+  "method-to-select-the-audio-segment": "Method to select the audio segment",
+  "audio-to-srt2": "Audio to SRT",
+  "convert-audio-files-to-srt-subtitle-format-using-faster-whisper2": "Convert audio files to SRT subtitle format using faster-whisper",
+  "extract-audio-segment2": "Extract Audio Segment",
+  "extract-a-25-second-audio-segment-based-on-whisper-srt-timestamp2": "Extract a 25-second audio segment based on Whisper SRT timestamps",
+  "srt-translation2": "SRT Translation",
+  "translate-srt-subtitle-files-between-different-languages-using-l2": "Translate SRT subtitle files between different languages using LLM models",
+  "video-subtitles": "Video Subtitles",
+  "complete-workflow-for-video-subtitle-processing-including-audio": "Complete workflow for video subtitle processing including audio extraction, SRT generation, translation, and MKV creation with embedded subtitles",
+  "create-mkv-video-1": "Create MKV Video #1",
+  "extract-audio-from-video-1": "Extract Audio from Video #1",
+  "srt-translation-1": "SRT Translation #1"
 }

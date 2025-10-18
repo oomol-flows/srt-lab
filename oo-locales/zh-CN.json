@@ -19,5 +19,16 @@
   "srt-subtitle-file-with-timestamp-information-from-whisper": "带有时间戳信息的SRT字幕文件（来自Whisper）",
   "original-audio-file-to-extract-segment-from": "要提取片段的原始音频文件",
   "target-duration-in-seconds-for-the-extracted-segment": "提取片段的目标时长（秒）",
-  "method-to-select-the-audio-segment": "选择音频片段的方法"
+  "method-to-select-the-audio-segment": "选择音频片段的方法",
+  "audio-to-srt2": "音频转 SRT",
+  "convert-audio-files-to-srt-subtitle-format-using-faster-whisper2": "使用 faster-whisper 将音频文件转换为 SRT 字幕格式",
+  "extract-audio-segment2": "提取音频片段",
+  "extract-a-25-second-audio-segment-based-on-whisper-srt-timestamp2": "根据 Whisper SRT 时间戳提取一个 25 秒的音频片段",
+  "srt-translation2": "SRT 翻译",
+  "translate-srt-subtitle-files-between-different-languages-using-l2": "使用 LLM 模型在不同语言之间翻译 SRT 字幕文件",
+  "video-subtitles": "视频 字幕",
+  "complete-workflow-for-video-subtitle-processing-including-audio": "完整的视频字幕处理工作流程，包括音频提取、SRT 生成、翻译以及带有内嵌字幕的 MKV 创建。",
+  "create-mkv-video-1": "创建 MKV 视频 #1",
+  "extract-audio-from-video-1": "从视频 #1 提取音频",
+  "srt-translation-1": "SRT 翻译 #1"
 }

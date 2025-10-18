@@ -1,0 +1,56 @@
+{
+  "nodes": {
+    "audio-to-srt#1": {
+      "rfNode": {
+        "position": {
+          "x": 972,
+          "y": 11
+        }
+      }
+    },
+    "make-mkv-video#1": {
+      "contentWidth": 500,
+      "rfNode": {
+        "position": {
+          "x": 1965,
+          "y": 0
+        }
+      }
+    },
+    "extract-audio#1": {
+      "rfNode": {
+        "position": {
+          "x": 486,
+          "y": 114
+        }
+      }
+    },
+    "srt-translation#1": {
+      "contentWidth": 440.6903433902449,
+      "rfNode": {
+        "position": {
+          "x": 1458,
+          "y": 85.25
+        }
+      }
+    }
+  },
+  "pseudoNodes": {
+    "input": {
+      "rfNode": {
+        "position": {
+          "x": 0,
+          "y": 18
+        }
+      }
+    },
+    "output": {
+      "rfNode": {
+        "position": {
+          "x": 2531,
+          "y": 99
+        }
+      }
+    }
+  }
+}

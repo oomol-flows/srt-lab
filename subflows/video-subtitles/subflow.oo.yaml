@@ -1,0 +1,248 @@
+nodes:
+  - node_id: audio-to-srt#1
+    task: self::audio-to-srt
+    inputs_from:
+      - handle: model_size
+        value: medium
+        from_flow:
+          - input_handle: model_size
+      - handle: language
+        value: auto
+        from_flow:
+          - input_handle: language
+      - handle: audio_file
+        from_node:
+          - node_id: extract-audio#1
+            output_handle: audio_file
+      - handle: use_gpu
+        value: true
+        from_flow:
+          - input_handle: use_gpu
+  - node_id: make-mkv-video#1
+    title: "%create-mkv-video-1%"
+    inputs_from:
+      - handle: video_file
+        from_flow:
+          - input_handle: video_file
+        from_node:
+          []
+      - handle: subtitle_file
+        from_node:
+          - node_id: srt-translation#1
+            output_handle: srt_file
+      - handle: subtitle_language
+        value: null
+        from_flow:
+          - input_handle: target_language
+      - handle: subtitle_title
+        value: null
+    task: ffmpeg::make-mkv-video
+  - node_id: extract-audio#1
+    title: "%extract-audio-from-video-1%"
+    inputs_from:
+      - handle: video_file
+        from_flow:
+          - input_handle: video_file
+        from_node:
+          []
+      - handle: output_format
+        value: mp3
+      - handle: audio_quality
+        value: 192
+    task: ffmpeg::extract-audio
+  - node_id: srt-translation#1
+    title: "%srt-translation-1%"
+    inputs_from:
+      - handle: srt_file
+        from_node:
+          - node_id: audio-to-srt#1
+            output_handle: srt_file
+      - handle: source_language
+        value: auto
+        from_flow:
+          - input_handle: language
+      - handle: target_language
+        value: zh
+        from_flow:
+          - input_handle: target_language
+      - handle: translation_style
+        value: null
+      - handle: llm
+        value:
+          model: kimi-k2-turbo-preview
+          temperature: 0.5
+          top_p: 1
+          max_tokens: 262144
+        from_flow:
+          - input_handle: llm
+    task: self::srt-translation
+inputs_def:
+  - handle: video_file
+    json_schema:
+      type: string
+      ui:widget: file
+      ui:options:
+        filters:
+          - name: Video Files
+            extensions:
+              - mp4
+              - avi
+              - mov
+              - mkv
+              - webm
+              - flv
+              - wmv
+        excludeAll: true
+    nullable: false
+    executor_name: python
+  - handle: model_size
+    json_schema:
+      type: string
+      enum:
+        - tiny
+        - base
+        - small
+        - medium
+        - large-v3
+      ui:options:
+        enumNames:
+          - Tiny (fastest, lowest accuracy)
+          - Base
+          - Small
+          - Medium
+          - Large-v3 (slowest, highest accuracy)
+    nullable: false
+    value: medium
+    executor_name: python
+  - handle: use_gpu
+    json_schema:
+      type: boolean
+    nullable: false
+    value: true
+    executor_name: python
+  - handle: language
+    json_schema:
+      type: string
+      enum:
+        - auto
+        - en
+        - zh
+        - es
+        - fr
+        - de
+        - ja
+        - ko
+        - ru
+        - ar
+        - pt
+        - it
+        - nl
+        - pl
+        - tr
+        - vi
+        - th
+        - id
+        - hi
+      ui:options:
+        enumNames:
+          - Auto Detect
+          - English
+          - Chinese (Simplified)
+          - Spanish
+          - French
+          - German
+          - Japanese
+          - Korean
+          - Russian
+          - Arabic
+          - Portuguese
+          - Italian
+          - Dutch
+          - Polish
+          - Turkish
+          - Vietnamese
+          - Thai
+          - Indonesian
+          - Hindi
+    nullable: false
+    value: auto
+    executor_name: python
+  - handle: target_language
+    json_schema:
+      type: string
+      enum:
+        - en
+        - zh
+        - es
+        - fr
+        - de
+        - ja
+        - ko
+        - ru
+        - ar
+        - pt
+        - it
+        - nl
+        - pl
+        - tr
+        - vi
+        - th
+        - id
+        - hi
+      ui:options:
+        enumNames:
+          - English
+          - Chinese
+          - Spanish
+          - French
+          - German
+          - Japanese
+          - Korean
+          - Russian
+          - Arabic
+          - Portuguese
+          - Italian
+          - Dutch
+          - Polish
+          - Turkish
+          - Vietnamese
+          - Thai
+          - Indonesian
+          - Hindi
+    nullable: false
+    value: zh
+    executor_name: python
+  - handle: llm
+    json_schema:
+      ui:options:
+        title: Model
+      ui:widget: llm::model
+    nullable: false
+    value:
+      model: kimi-k2-turbo-preview
+      temperature: 0.5
+      top_p: 1
+      max_tokens: 262144
+    executor_name: python
+outputs_def:
+  - handle: output_video
+    json_schema:
+      type: string
+      ui:widget: save
+      ui:options:
+        filters:
+          - name: MKV Files
+            extensions:
+              - mkv
+        excludeAll: true
+    nullable: false
+    description: MKV video file with muxed subtitle track
+    executor_name: python
+outputs_from:
+  - handle: output_video
+    from_node:
+      - node_id: make-mkv-video#1
+        output_handle: output_video
+title: "%video-subtitles%"
+icon: ":carbon:video-player:"
+description: "%complete-workflow-for-video-subtitle-processing-including-audio%"

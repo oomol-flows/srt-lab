@@ -148,6 +148,6 @@ executor:
   options:
     entry: __init__.py
     spawn: false
-title: "%srt-translation%"
+title: "%srt-translation2%"
 icon: ":carbon:translate:"
-description: "%translate-srt-subtitle-files-between-different-languages-using-l%"
+description: "%translate-srt-subtitle-files-between-different-languages-using-l2%"

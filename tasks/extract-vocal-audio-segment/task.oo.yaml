@@ -81,6 +81,6 @@ executor:
   options:
     entry: __init__.py
     spawn: false
-title: "%extract-audio-segment%"
+title: "%extract-audio-segment2%"
 icon: ":carbon:cut:"
-description: "%extract-a-25-second-audio-segment-based-on-whisper-srt-timestamp%"
+description: "%extract-a-25-second-audio-segment-based-on-whisper-srt-timestamp2%"

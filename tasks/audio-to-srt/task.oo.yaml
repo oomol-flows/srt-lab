@@ -103,6 +103,6 @@ executor:
   options:
     entry: __init__.py
     spawn: false
-title: "%audio-to-srt%"
+title: "%audio-to-srt2%"
 icon: ":carbon:audio-console:"
-description: "%convert-audio-files-to-srt-subtitle-format-using-faster-whisper%"
+description: "%convert-audio-files-to-srt-subtitle-format-using-faster-whisper2%"
