@@ -7,6 +7,7 @@ class Inputs(typing.TypedDict):
     audio_file: str
     model_size: typing.Literal["tiny", "base", "small", "medium", "large-v3"]
     language: typing.Literal["auto", "en", "zh", "es", "fr", "de", "ja", "ko", "ru", "ar", "pt", "it", "nl", "pl", "tr", "vi", "th", "id", "hi"]
+    use_gpu: bool
 class Outputs(typing.TypedDict):
     srt_file: typing.NotRequired[str]
 #endregion
@@ -22,11 +23,26 @@ def main(params: Inputs, context: Context) -> Outputs | None:
     Returns:
         Dictionary with generated SRT file path
     """
+    import os
+    import sys
     from pathlib import Path
+    import ctypes
+
+    # Preload cuDNN libraries for faster-whisper GPU support
+    cuda_lib_path = Path(sys.executable).parent.parent / "lib" / "python3.11" / "site-packages" / "nvidia" / "cudnn" / "lib"
+    if cuda_lib_path.exists():
+        try:
+            # Preload cuDNN libraries in correct order
+            ctypes.CDLL(str(cuda_lib_path / "libcudnn.so.9"))
+            ctypes.CDLL(str(cuda_lib_path / "libcudnn_ops.so.9"))
+            ctypes.CDLL(str(cuda_lib_path / "libcudnn_cnn.so.9"))
+        except Exception as e:
+            print(f"Warning: Failed to preload cuDNN libraries: {e}")
 
     audio_file_path = params["audio_file"]
     model_size = params["model_size"]
     language = params["language"]
+    use_gpu = params["use_gpu"]
 
     # Language code mapping for faster-whisper
     lang_codes = {
@@ -52,8 +68,70 @@ def main(params: Inputs, context: Context) -> Outputs | None:
     }
 
     # Initialize faster-whisper model
-    # Using CPU for compatibility, can be changed to "cuda" for GPU
-    model = WhisperModel(model_size, device="cpu", compute_type="int8")
+    # Configure device and compute type based on GPU availability
+    import torch
+
+    # Check CUDA availability first
+    cuda_available = torch.cuda.is_available()
+
+    if use_gpu and not cuda_available:
+        print("=" * 60)
+        print("⚠️  GPU requested but CUDA is not available")
+        print("=" * 60)
+        print("Falling back to CPU mode...")
+        use_gpu = False
+
+    if use_gpu:
+        device = "cuda"
+        compute_type = "float16"  # Better performance on GPU
+        print("=" * 60)
+        print("🚀 GPU Acceleration Mode Enabled")
+        print("=" * 60)
+        print(f"📌 Device: {device}")
+        print(f"📌 Compute Type: {compute_type}")
+        print(f"📌 Model Size: {model_size}")
+        print("\nℹ️  Requirements for GPU:")
+        print("  - NVIDIA GPU with CUDA support")
+        print("  - CUDA 12 installed")
+        print("  - nvidia-cublas-cu12 and nvidia-cudnn-cu12 libraries")
+        print("=" * 60)
+    else:
+        device = "cpu"
+        compute_type = "int8"  # Optimized for CPU
+        print("=" * 60)
+        print("💻 CPU Mode")
+        print("=" * 60)
+        print(f"📌 Device: {device}")
+        print(f"📌 Compute Type: {compute_type}")
+        print(f"📌 Model Size: {model_size}")
+        print("=" * 60)
+
+    try:
+        print("\n⏳ Initializing Whisper model...")
+        model = WhisperModel(model_size, device=device, compute_type=compute_type)
+        if device == "cuda":
+            print("✅ Successfully initialized model on GPU!")
+            print("🎯 GPU acceleration is active")
+        else:
+            print("✅ Successfully initialized model on CPU")
+        print("=" * 60 + "\n")
+    except Exception as e:
+        if device == "cuda":
+            print(f"\n❌ GPU initialization failed!")
+            print(f"Error: {str(e)}")
+            print("\n⚠️  Possible reasons:")
+            print("  1. No NVIDIA GPU available")
+            print("  2. CUDA drivers not installed")
+            print("  3. Missing CUDA libraries (nvidia-cublas-cu12, nvidia-cudnn-cu12)")
+            print("\n🔄 Falling back to CPU mode...")
+            print("=" * 60 + "\n")
+            device = "cpu"
+            compute_type = "int8"
+            model = WhisperModel(model_size, device=device, compute_type=compute_type)
+            print("✅ Successfully initialized model on CPU (fallback mode)")
+            print("=" * 60 + "\n")
+        else:
+            raise
 
     # Transcribe audio file
     whisper_language = lang_codes.get(language)

@@ -8,3 +8,5 @@ nodes:
         value: base
       - handle: language
         value: auto
+      - handle: use_gpu
+        value: false

@@ -12,7 +12,13 @@
       "Bash(pip uninstall:*)",
       "Bash(PIP_NO_BINARY=av poetry install --no-root)",
       "Bash(poetry show:*)",
-      "Bash(ffprobe:*)"
+      "Bash(ffprobe:*)",
+      "Bash(poetry remove:*)",
+      "Bash(nvidia-smi:*)",
+      "Bash(python:*)",
+      "Read(//root/.oocana/sessions/cf30e2fe-3cf8-430a-9a3c-5fb3b8f70f23/**)",
+      "Read(//root/.oocana/sessions/**)",
+      "Read(//root/.local/share/uv/python/cpython-3.11.13-linux-x86_64-gnu/**)"
     ],
     "deny": [],
     "ask": []

@@ -7,33 +7,6 @@ nodes:
       - handle: language
         value: auto
       - handle: audio_file
-        value: /oomol-driver/oomol-storage/Area22211_audio.mp3
-  - node_id: srt-translation#1
-    task: self::srt-translation
-    inputs_from:
-      - handle: srt_file
-        from_node:
-          - node_id: audio-to-srt#1
-            output_handle: srt_file
-      - handle: source_language
-        value: auto
-      - handle: target_language
-        value: en
-      - handle: llm
-        value:
-          model: oomol-chat
-          temperature: 0
-          top_p: 0.5
-          max_tokens: 4096
-      - handle: translation_style
-        value:
-  - node_id: extract-audio-segment#1
-    title: "%extract-audio-segment-1%"
-    inputs_from:
-      - handle: srt_file
-      - handle: audio_file
-      - handle: target_duration
-        value: 25
-      - handle: selection_method
-        value: densest
-    task: self::extract-vocal-audio-segment
+        value: /oomol-driver/oomol-storage/《酌见2》俞敏洪对话张朝阳#以价值观为导向的人生意义_audio.mp3
+      - handle: use_gpu
+        value: true

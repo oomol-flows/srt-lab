@@ -13,7 +13,6 @@
   "target-language-for-translation": "翻译目标语言",
   "translation-style-prompt-e-g-formal-casual-professional-slang-li": "翻译风格提示（例如：正式、休闲、专业、俚语、文学）。默认值为null，表示中性风格。",
   "llm-model-configuration-for-translation": "用于翻译的LLM模型配置",
-  "extract-audio-segment-1": "提取音频片段 #1",
   "test-extract-audio-segment": "测试提取音频片段",
   "extract-audio-segment": "提取人声音频片段",
   "extract-a-25-second-audio-segment-based-on-whisper-srt-timestamp": "根据Whisper SRT时间戳提取约25秒的音频片段",
