@@ -4,11 +4,12 @@ nodes:
     task: self::audio-to-srt
     inputs_from:
       - handle: audio_file
-        value: /oomol-driver/oomol-storage/Area22211_audio.mp3
       - handle: model_size
         value: base
       - handle: language
         value: auto
+      - handle: use_gpu
+        value: true
   - node_id: extract-audio-segment#1
     task: self::extract-vocal-audio-segment
     inputs_from:
@@ -17,7 +18,6 @@ nodes:
           - node_id: audio-to-srt#1
             output_handle: srt_file
       - handle: audio_file
-        value: /oomol-driver/oomol-storage/Area22211_audio_trimmed.mp3
       - handle: target_duration
         value: 25
       - handle: selection_method

@@ -63,7 +63,7 @@ inputs_def:
         enumNames:
           - Auto Detect
           - English
-          - Chinese
+          - Chinese (Simplified)
           - Spanish
           - French
           - German
@@ -85,7 +85,7 @@ inputs_def:
     description: "%enable-gpu-acceleration-for-faster-processing-requires-cuda%"
     json_schema:
       type: boolean
-    value: false
+    value: true
 outputs_def:
   - handle: srt_file
     json_schema:

@@ -3,10 +3,10 @@ nodes:
     task: self::audio-to-srt
     inputs_from:
       - handle: model_size
-        value: base
+        value: medium
       - handle: language
         value: auto
       - handle: audio_file
         value: /oomol-driver/oomol-storage/《酌见2》俞敏洪对话张朝阳#以价值观为导向的人生意义_audio.mp3
       - handle: use_gpu
-        value: false
+        value: true
