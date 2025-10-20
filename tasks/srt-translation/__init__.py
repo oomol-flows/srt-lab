@@ -247,12 +247,18 @@ def main(params: Inputs, context: Context) -> Outputs | None:
 3. Each translation must be on a separate line
 4. Do NOT add any explanations, notes, or extra text
 5. Do NOT change the numbering
-6. Do NOT skip any numbers
+6. Do NOT skip any numbers - even if a subtitle is empty, special characters, or music notes, you MUST include it with its number
+7. If a subtitle contains only symbols (like ♪, ..., --), translate or keep as appropriate
 
-Example format:
-[1] Translation of first text
-[2] Translation of second text
-[3] Translation of third text
+Example input:
+[1] Hello world
+[2] ♪
+[3] How are you?
+
+Example output:
+[1] Translation of hello world
+[2] ♪
+[3] Translation of how are you
 
 Now translate:
 {source_text}
@@ -266,12 +272,18 @@ Your response:"""
 3. Each translation must be on a separate line
 4. Do NOT add any explanations, notes, or extra text
 5. Do NOT change the numbering
-6. Do NOT skip any numbers
+6. Do NOT skip any numbers - even if a subtitle is empty, special characters, or music notes, you MUST include it with its number
+7. If a subtitle contains only symbols (like ♪, ..., --), translate or keep as appropriate
 
-Example format:
-[1] Translation of first text
-[2] Translation of second text
-[3] Translation of third text
+Example input:
+[1] Hello world
+[2] ♪
+[3] How are you?
+
+Example output:
+[1] Translation of hello world
+[2] ♪
+[3] Translation of how are you
 
 Now translate:
 {source_text}
@@ -311,33 +323,71 @@ Your response:"""
         numbered_translations = []
         unnumbered_translations = []
 
-        # First pass: extract numbered translations
+        # First pass: extract numbered translations with enhanced pattern matching
         for line in translated_lines:
             # Try to match various numbering patterns
             import re
-            # Match [1], [2], etc. at the beginning
+            matched = False
+
+            # Pattern 1: [1], [2], etc.
             numbered_match = re.match(r'^\[(\d+)\]\s*(.+)$', line)
             if numbered_match:
                 num = int(numbered_match.group(1))
                 text = numbered_match.group(2).strip()
                 translation_map[num] = text
                 numbered_translations.append((num, text))
-            else:
-                # No numbering, collect as potential fallback
-                if line and not line.startswith('['):
-                    unnumbered_translations.append(line)
+                matched = True
+
+            # Pattern 2: 1., 2., etc.
+            if not matched:
+                numbered_match = re.match(r'^(\d+)\.\s*(.+)$', line)
+                if numbered_match:
+                    num = int(numbered_match.group(1))
+                    text = numbered_match.group(2).strip()
+                    translation_map[num] = text
+                    numbered_translations.append((num, text))
+                    matched = True
+
+            # Pattern 3: 1), 2), etc.
+            if not matched:
+                numbered_match = re.match(r'^(\d+)\)\s*(.+)$', line)
+                if numbered_match:
+                    num = int(numbered_match.group(1))
+                    text = numbered_match.group(2).strip()
+                    translation_map[num] = text
+                    numbered_translations.append((num, text))
+                    matched = True
+
+            # Pattern 4: 1:, 2:, etc.
+            if not matched:
+                numbered_match = re.match(r'^(\d+):\s*(.+)$', line)
+                if numbered_match:
+                    num = int(numbered_match.group(1))
+                    text = numbered_match.group(2).strip()
+                    translation_map[num] = text
+                    numbered_translations.append((num, text))
+                    matched = True
+
+            # No numbering, collect as potential fallback
+            if not matched and line and not any(line.startswith(prefix) for prefix in ['[', '#', '-', '*']):
+                unnumbered_translations.append(line)
 
         logger.debug(f"Found {len(numbered_translations)} numbered translations: {list(translation_map.keys())}")
         logger.debug(f"Found {len(unnumbered_translations)} unnumbered translations")
 
+        # Track failed subtitles in this batch for retry
+        batch_failed_indices = []
+
         # Process each subtitle with multiple fallback strategies
         for idx, (index, timestamp, original_text) in enumerate(batch):
-            translated = original_text  # ultimate fallback
+            translated = None
             expected_num = idx + 1
+            strategy_used = None
 
             # Strategy 1: Try exact numbering match
             if expected_num in translation_map:
                 translated = translation_map[expected_num]
+                strategy_used = "exact_match"
                 logger.debug(f"Strategy 1 success: Found translation for subtitle {expected_num}")
 
             # Strategy 2: Try close numbering matches (LLM might have offset by 1)
@@ -352,33 +402,81 @@ Your response:"""
 
                 if min_diff <= 2:  # Allow up to 2 numbers difference
                     translated = translation_map[closest_num]
+                    strategy_used = "close_match"
                     logger.warning(f"Strategy 2 used: Using translation from {closest_num} for subtitle {expected_num} (diff: {min_diff})")
 
             # Strategy 3: Use positional matching if we have unnumbered translations
-            elif idx < len(unnumbered_translations) and unnumbered_translations[idx]:
+            if translated is None and idx < len(unnumbered_translations) and unnumbered_translations[idx]:
                 translated = unnumbered_translations[idx]
+                strategy_used = "positional"
                 logger.warning(f"Strategy 3 used: Using positional translation for subtitle {expected_num}")
 
             # Strategy 4: Try to extract from numbered translations by order
-            elif numbered_translations and idx < len(numbered_translations):
+            if translated is None and numbered_translations and idx < len(numbered_translations):
                 translated = numbered_translations[idx][1]
+                strategy_used = "ordered"
                 logger.warning(f"Strategy 4 used: Using ordered translation for subtitle {expected_num}")
 
-            else:
-                logger.error(f"All strategies failed for subtitle {expected_num}, using original text")
+            # Mark for retry if all strategies failed
+            if translated is None:
+                logger.error(f"All strategies failed for subtitle {expected_num}, marking for retry")
+                batch_failed_indices.append(idx)
+                translated = original_text  # Temporary fallback
+                strategy_used = "original"
 
             # Clean up the translation
             translated = str(translated).strip()
             translated = translated.strip('"').strip("'").strip()
             if not translated:
+                if strategy_used != "original":
+                    batch_failed_indices.append(idx)
                 translated = original_text
-                logger.warning(f"Empty translation for subtitle {expected_num}, using original")
+                logger.warning(f"Empty translation for subtitle {expected_num}, marking for retry")
 
-            logger.debug(f"Final translation for {expected_num}: {translated[:50]}...")
+            logger.debug(f"Final translation for {expected_num}: {translated[:50]}... (strategy: {strategy_used})")
             translated_subtitles.append((index, timestamp, translated))
 
+        # Retry failed subtitles individually
+        if batch_failed_indices:
+            retry_failure_rate = len(batch_failed_indices) / len(batch)
+            logger.warning(f"Batch {batch_num} has {len(batch_failed_indices)} failed subtitles ({retry_failure_rate*100:.1f}% failure rate)")
+
+            # Only retry if failure rate is significant but not catastrophic
+            if 0 < retry_failure_rate <= 0.5:  # Between 0% and 50% failure
+                logger.info(f"Retrying {len(batch_failed_indices)} failed subtitles individually...")
+
+                for fail_idx in batch_failed_indices:
+                    subtitle_idx, subtitle_ts, original = batch[fail_idx]
+                    global_idx = len(translated_subtitles) - len(batch) + fail_idx
+
+                    retry_prompt = f"""Translate this single subtitle text to {target_lang_name}.{style_instruction}
+
+Original text: {original.strip()}
+
+Respond with ONLY the translation, no numbering, no explanations:"""
+
+                    try:
+                        retry_translation = call_llm_with_retry(
+                            prompt=retry_prompt,
+                            max_tokens=500,  # Single subtitle shouldn't need much
+                            temperature=llm_config.get("temperature", 0),
+                            top_p=llm_config.get("top_p", 0.5)
+                        )
+
+                        if retry_translation and retry_translation.strip() and retry_translation.strip() != original.strip():
+                            # Clean up retry translation
+                            retry_translation = retry_translation.strip().strip('"').strip("'").strip()
+                            # Update the subtitle
+                            translated_subtitles[global_idx] = (subtitle_idx, subtitle_ts, retry_translation)
+                            logger.info(f"✓ Successfully retried subtitle at position {fail_idx+1}")
+                        else:
+                            logger.warning(f"✗ Retry failed for subtitle at position {fail_idx+1}, keeping original")
+
+                    except Exception as e:
+                        logger.error(f"✗ Retry exception for subtitle at position {fail_idx+1}: {str(e)}")
+
         # Verify translation completeness
-        successful_translations = sum(1 for i, (idx, _, orig) in enumerate(batch)
+        successful_translations = sum(1 for i, (_, _, orig) in enumerate(batch)
                                     if translated_subtitles[-len(batch)+i][2] != orig)
         failed_translations = len(batch) - successful_translations
 

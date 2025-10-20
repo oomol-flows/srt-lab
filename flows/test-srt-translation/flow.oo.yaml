@@ -1,0 +1,19 @@
+title: Test SRT Translation
+nodes:
+  - node_id: srt-translation#1
+    task: self::srt-translation
+    inputs_from:
+      - handle: srt_file
+        value: /oomol-driver/oomol-storage/test.srt
+      - handle: source_language
+        value: en
+      - handle: target_language
+        value: zh
+      - handle: translation_style
+        value:
+      - handle: llm
+        value:
+          model: kimi-k2-turbo-preview
+          temperature: 0.5
+          top_p: 1
+          max_tokens: 262144
